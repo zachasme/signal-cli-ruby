@@ -47,7 +47,7 @@ jobs:
         if: github.event_name != 'push'
         run: |
           for gem in pkg/*.gem; do
-            read -r version platform < <(ruby -e 'spec = Gem::Package.new(ARGV[0]).spec; print spec.version, " ", spec.platform' "$gem")
+            read -r version platform < <(ruby -rrubygems/package -e 'spec = Gem::Package.new(ARGV[0]).spec; puts "#{spec.version} #{spec.platform}"' "$gem")
             if ! curl -fsS -o /dev/null "https://rubygems.org/api/v2/rubygems/signal-cli/versions/$version.json?platform=$platform"; then
               gem push "$gem"
             fi
