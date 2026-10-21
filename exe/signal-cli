@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# RubyGems only installs Ruby executables, so this one swaps itself for the real binary.
+require "signal-cli"
+
+begin
+  exec SignalCli.executable, *ARGV
+rescue SignalCli::ExecutableNotFound => error
+  abort error.message
+end
